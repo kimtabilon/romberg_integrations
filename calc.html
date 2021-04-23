@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<html>
+<head>
+	<title>A test for the automatic integrator based on Romberg integration and trapezoidal rule</title>
+</head>
+<body>
+
+<strong>lower limit of integration</strong><br>
+<input type="text" value="0.001" id="input_a" placeholder="a"><br><br>
+
+<strong>upper limit of integraton</strong><br>
+<input type="text" value="10" id="input_b" placeholder="b"><br><br>
+
+<strong>number of partitions, segment is then 2^nmax </strong><br>
+<input type="text" value="20" id="input_nmax" placeholder="nmax"><br><br>
+
+<strong>tolerance on absolute approximate error</strong><br>
+<input type="text" value="0.0" id="input_tol_ea" placeholder="tol_ae"><br><br>
+
+<strong>tolerance on percentage absolute relative approximate error</strong><br>
+<input type="text" value="0.0000000005" id="input_tol_rae" placeholder="tol_rae"><br><br>
+
+<button id='calc'>calculate</button>
+
+<h2 id="romberg"></h2>
+<h2 id="exact"></h2>
+
+<script src="import/jquery.min.js"></script>
+<script src="import/math.min.js"></script>
+<script src="import/trap.js"></script>
+
+<script>
+$('#calc').on('click', function () {
+	// This program is written to test the romberg integration scheme that is used
+	// as an automatic integrator
+	// INPUTS
+	// a= lower limit of integration
+	// b= upper limit of integraton
+	// nmax= number of partitions, segment is then 2^nmax 
+	// tol_ae= tolerance on absolute approximate error 
+	// tol_rae=tolerance on percentage absolute relative approximate error 
+	var a=parseFloat($('#input_a').val());
+	var b=parseFloat($('#input_b').val());
+	var nmax=parseFloat($('#input_nmax').val());
+	var tol_ea=parseFloat($('#input_tol_ea').val());
+	var tol_rae=parseFloat($('#input_tol_rae').val());
+	
+	console.log(a,b,nmax,tol_ea,tol_rae);
+
+	var abc=auto_integrator_trap_romb_hnm(func,a,b,nmax,tol_ea,tol_rae);
+	console.log("romberg "+abc);
+	$('#romberg').html("romberg "+abc);
+
+	var exact=math.log(b)-math.log(a);
+	$('#exact').html("exact "+exact);
+	console.log("exact "+exact);
+	
+	function func(x)
+	{
+	   //val=math.exp(-x)
+	   //var pi=4*math.atan(1.0)
+	   //var val=2/math.sqrt(pi)*math.exp(-x*x)
+	   var val=1/x;
+	   return(val);
+	}
+
+});
+</script>
+</body>
+</html>
